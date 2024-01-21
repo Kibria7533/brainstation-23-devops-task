@@ -25,19 +25,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: make env
-        run: touch .env
-
-      - name: add secrets
+      - name: create docker image
+        working-directory: api
         run: |
+          touch .env
           cat << EOF > .env
           VERSION = ${{ github.event.release.tag_name }}
           PORT = ${{ secrets.PORT }}
           WEATHER_API_KEY = ${{secrets.WEATHER_API_KEY }}
-
-      - name: create docker image
-        working-directory: api
-        run: docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} .
+          docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
