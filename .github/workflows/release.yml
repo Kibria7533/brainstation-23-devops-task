@@ -38,7 +38,7 @@ jobs:
       - name: create docker image
         run: |
           ls
-          cd /api
+          cd api
           docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} Dockerfile
 
       - name: Log in to Docker Hub
