@@ -4,6 +4,10 @@
 
 ## eks for container orcestation.
 
+## I optimised the docker file (installed )
+
+fyi: I couldnt manage to modulirazed the terraform code
+
 # Api end point for depo app: http://a3d38e1ee6e6f49adaa00791138277fc-1780581301.ap-south-1.elb.amazonaws.com/
 
 # Please check this url for better view: https://lucid.app/lucidchart/5e65cb0b-e4b0-498e-a3aa-a35e5467225b/edit?viewport_loc=-1627%2C-270%2C3202%2C1665%2C0_0&invitationId=inv_eff8b022-ddcc-4f08-b010-4c8ba342738d
