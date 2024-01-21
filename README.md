@@ -6,7 +6,7 @@
 
 ## I optimised the docker file (installed )
 
-fyi: I couldnt manage to modulirazed the terraform code
+fyi: I couldnt manage to modulirazed the terraform code, as i do not use terraform yet professionally. But i understand modulirised terraform code. I tried few issues, And for shortage of time I decided to go with current implementation.
 
 # Api end point for depo app: http://a3d38e1ee6e6f49adaa00791138277fc-1780581301.ap-south-1.elb.amazonaws.com/
 
