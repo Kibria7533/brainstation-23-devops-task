@@ -6,7 +6,7 @@ const os = require('os')
 require('dotenv').config()
 
 app.get("/", (req, res) => {
-    return res.send(`working, please visit "http://localhost:3000/api/hello" and "http://localhost:3000/api/health" to see the API's`)
+    return res.send(`working, please visit "/api/hello" and "/api/health" to see the API's`)
 })
 
 // Endpoint returning hostname, datetime, version, and weather data for Dhaka
