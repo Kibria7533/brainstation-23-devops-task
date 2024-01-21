@@ -16,7 +16,7 @@ permissions: write-all
 
 jobs:
   build-and-push:
-    name: Build and Push to ECR
+    name: Brainstation devops task
     runs-on: ubuntu-latest
 
     steps:
