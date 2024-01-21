@@ -36,7 +36,9 @@ jobs:
           WEATHER_API_KEY = ${{secrets.WEATHER_API_KEY }}
 
       - name: create docker image
-        run: docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} -f api/Dockerfile .
+        run: |
+          cd /api
+          docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} Dockerfile
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -48,7 +50,7 @@ jobs:
         run: docker push docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }}
 
       - name: sed
-        run: sed -i "s|<IMAGE>|docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }}|" k8s/deployment.yaml
+        run: sed -i "s|<IMAGE>|docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }}|" k8s/deployment.yaml
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
