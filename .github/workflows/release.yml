@@ -31,7 +31,7 @@ jobs:
       - name: add secrets
         run: |
           cat << EOF > .env
-          VERSION = ${{secrets.VERSION }}
+          VERSION = ${{ github.event.release.tag_name }}
           PORT = ${{ secrets.PORT }}
           WEATHER_API_KEY = ${{secrets.WEATHER_API_KEY }}
 
