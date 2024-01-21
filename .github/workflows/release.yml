@@ -62,4 +62,4 @@ jobs:
         run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name test-cluster
 
       - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl create -f k8s/deployment.yaml
+        run: kubectl create -f k8s/deployment.yaml --validate=false
