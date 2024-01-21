@@ -37,6 +37,7 @@ jobs:
 
       - name: create docker image
         run: |
+          ls
           cd /api
           docker build -t docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }} Dockerfile
 
@@ -47,7 +48,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: push docker image
-        run: docker push docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }}
+        run: docker push docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }}
 
       - name: sed
         run: sed -i "s|<IMAGE>|docker.io/${{ secrets.DOCKER_USERNAME }}/devops-task-kibria:${{ github.event.release.tag_name }}|" k8s/deployment.yaml
