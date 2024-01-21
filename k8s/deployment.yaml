@@ -1,0 +1,52 @@
+# deployment.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+  namespace: demo
+  labels:
+    app: demo-app
+spec:
+  selector:
+    matchLabels:
+      app: demo-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+        - name: demo-container
+          image: <IMAGE>
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: demo
+  name: demo-service
+  labels:
+    app: demo-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: demo-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+    - name: https
+      port: 443
+      targetPort: 3000

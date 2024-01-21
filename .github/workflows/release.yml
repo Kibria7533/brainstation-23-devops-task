@@ -1,0 +1,64 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: release-check
+
+on:
+  release:
+    types:
+      - created
+
+permissions: write-all
+
+jobs:
+  build-and-push:
+    name: Build and Push to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: make env
+        run: touch .env
+
+      - name: add secrets
+        run: |
+          cat << EOF > .env
+          VERSION = ${{secrets.VERSION }}
+          PORT = ${{ secrets.PORT }}
+          WEATHER_API_KEY = ${{secrets.WEATHER_API_KEY }}
+
+      - name: create docker image
+        run: docker build -t docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }} .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: push docker image
+        run: docker push docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }}
+
+      - name: sed
+        run: sed -i "s|<IMAGE>|docker.io/8kamrul/devops-task-kibria:${{ github.event.release.tag_name }}|" k8s/deployment.yaml
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update Kubeconfig with short-lived credentials
+        run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name test-cluster
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f k8s/deployment.yaml
